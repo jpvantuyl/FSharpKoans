@@ -1,4 +1,4 @@
-﻿open FSharpKoans
+open FSharpKoans
 open FSharpKoans.Core
 
 let runner = KoanRunner()
@@ -6,7 +6,7 @@ let result = runner.ExecuteKoans()
 
 match result with
 | Success message -> printf "%s" message
-| Failure (message, ex) -> 
+| Failure (message, ex) ->
     printf "%s" message
     printfn ""
     printfn ""
@@ -20,7 +20,3 @@ match result with
     
 printfn ""
 printfn ""
-printfn ""
-printfn ""
-printf "Press any key to continue..."
-System.Console.ReadKey() |> ignore
