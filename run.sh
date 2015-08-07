@@ -1,4 +1,4 @@
 #!/bin/sh
 
-xbuild FSharpKoans.sln
+xbuild /noconsolelogger FSharpKoans.sln
 mono FSharpKoans/bin/Debug/FSharpKoans.exe
