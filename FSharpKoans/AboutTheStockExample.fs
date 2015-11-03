@@ -1,5 +1,6 @@
 ﻿namespace FSharpKoans
 open FSharpKoans.Core
+open System
 
 //---------------------------------------------------------------
 // Apply Your Knowledge!
@@ -53,13 +54,59 @@ module ``about the stock example`` =
           "2012-03-02,32.31,32.44,32.00,32.08,47314200,32.08";
           "2012-03-01,31.93,32.39,31.85,32.29,77344100,32.29";
           "2012-02-29,31.89,32.00,31.61,31.74,59323600,31.74"; ]
-    
+      
+    let splitCommas (x:string) =
+        x.Split([|','|])
+        
+    let parseStockPrice (x:string) = 
+        System.Double.Parse(x)
+        
+    let getStockPriceVariance row = 
+        row
+        |> splitCommas
+        |> (fun x -> parseStockPrice(x.[4]) - parseStockPrice(x.[1]))
+        |> (fun x -> System.Math.Round(x, 2))
+        |> abs
+        
+    let getMaxVarianceRow stockData =
+        stockData
+        |> Seq.skip 1 //header
+        |> Seq.maxBy getStockPriceVariance
+
     // Feel free to add extra [<Koan>] members here to write
     // tests for yourself along the way. You can also try 
     // using the F# Interactive window to check your progress.
+    
+    [<Koan>]
+    let CanSplitTheString() =
+        let headers = splitCommas stockData.[0]
+        
+        AssertEquality ["Date";"Open";"High";"Low";"Close";"Volume";"Adj Close"] headers
+
+    
+    [<Koan>]
+    let CanParseThePrice() =
+        let price = parseStockPrice "31.61"
+        
+        AssertEquality 31.61 price
+
+    
+    [<Koan>]
+    let CanGetTheVariance() =
+        let variance = getStockPriceVariance "2012-02-29,31.89,32.00,31.61,31.74,59323600,31.74";
+        
+        AssertEquality 0.15 variance
+
+    
+    [<Koan>]
+    let CanGetTheRowWithTheGreatestVariance() =
+        let row = getMaxVarianceRow stockData;
+        
+        AssertEquality "2012-03-13,32.24,32.69,32.15,32.67,48951700,32.67" row
+
 
     [<Koan>]
     let YouGotTheAnswerCorrect() =
-        let result =  __
+        let result = splitCommas(getMaxVarianceRow stockData).[0]
         
         AssertEquality "2012-03-13" result
